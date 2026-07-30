@@ -578,13 +578,22 @@
     let editingItemId = null;
 
     window.addEventListener('DOMContentLoaded', () => {
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('header-data').value = today;
+  // Ajuste para pegar a data local (respeitando o fuso UTC-3)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const today = `${year}-${month}-${day}`;
 
-      loadHeaderData();
-      renderSelects();
-      loadFormDraft();
-      renderRegistros();
+  // Só preenche se ainda não houver data salva no localStorage
+  if (!localStorage.getItem(STORAGE_KEYS.HEADER)) {
+    document.getElementById('header-data').value = today;
+  }
+
+  loadHeaderData();
+  renderSelects();
+  loadFormDraft();
+  renderRegistros();
 
       const headerInputs = ['header-atividade', 'header-local', 'header-data'];
       headerInputs.forEach(id => {
